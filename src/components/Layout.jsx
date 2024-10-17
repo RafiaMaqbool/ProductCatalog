@@ -1,16 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import NavBar from './NavBar';
 import SideBar from './SideBar';
-import Cart from './Cart';
 import ProductList from '../pages/ProductList';
 
 const Container = styled.div`
-  background-color: #f0f0f0; 
+  background-color: #f0f0f0;
 `;
 
 const FlexContainer = styled.div`
   display: flex;
+`;
+
+const SideBarWrapper = styled.div`
+  width: 250px; /* Set a fixed width for the sidebar */
+  flex-shrink: 0; /* Prevent the sidebar from shrinking */
+`;
+
+const ContentWrapper = styled.div`
+  flex-grow: 1; /* The ProductList will take up the remaining space */
 `;
 
 const Layout = () => {
@@ -24,8 +32,12 @@ const Layout = () => {
     <Container>
       <NavBar />
       <FlexContainer>
-        <SideBar onCategorySelect={handleCategorySelect} />
-        <ProductList category={selectedCategory} />
+        <SideBarWrapper>
+          <SideBar onCategorySelect={handleCategorySelect} />
+        </SideBarWrapper>
+        <ContentWrapper>
+          <ProductList category={selectedCategory} />
+        </ContentWrapper>
       </FlexContainer>
     </Container>
   );

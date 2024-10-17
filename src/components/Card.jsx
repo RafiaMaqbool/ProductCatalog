@@ -1,4 +1,4 @@
-import React from 'react'; 
+import React from 'react';
 import styled from 'styled-components';
 
 const CardContainer = styled.div`
@@ -8,7 +8,7 @@ const CardContainer = styled.div`
   border-radius: 8px;
   width: 100%;
   max-width: 250px;
-  height: 320px;
+  height: 350px;
   flex-basis: 200px;
   box-sizing: border-box;
   background-color: white;
@@ -16,6 +16,7 @@ const CardContainer = styled.div`
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
@@ -36,13 +37,6 @@ const CardTitle = styled.h2`
   flex-shrink: 0;
 `;
 
-const CardDescription = styled.p`
-  margin-top: 8px;
-  color: #555;
-  flex-grow: 1;
-  overflow: hidden;
-`;
-
 const ExtraInfo = styled.div`
   margin-top: 12px;
   font-size: 0.9rem;
@@ -50,17 +44,31 @@ const ExtraInfo = styled.div`
   flex-shrink: 0;
 `;
 
-const Card = ({ title, image, description, extraInfo }) => {
+const AddToCartButton = styled.button`
+  margin-top: auto;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+const Card = ({ title, image, extraInfo, onClick }) => {
   return (
-    <CardContainer>
+    <CardContainer onClick={onClick}>
       {image ? (
         <CardImage src={image} alt={title} />
       ) : (
-        <CardDescription>No image available</CardDescription>
+        <p>No image available</p>
       )}
       <CardTitle>{title}</CardTitle>
-      {description && <CardDescription>{description}</CardDescription>}
-      {extraInfo && <ExtraInfo>{extraInfo}</ExtraInfo>}
+      <ExtraInfo>{extraInfo}</ExtraInfo>
+      <AddToCartButton>Add to Cart</AddToCartButton>
     </CardContainer>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Card from '../components/Card';
+import ProductDetails from './ProductDetails';
 
 const ProductListContainer = styled.div`
   display: flex;
@@ -12,13 +13,13 @@ const ProductListContainer = styled.div`
 
 const ProductList = ({ category }) => {
   const [products, setProducts] = useState([]);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
   useEffect(() => {
-    // If no category is selected, fetch all products
     const fetchProducts = async () => {
       const endpoint = category
         ? `https://dummyjson.com/products/category/${category}`
-        : 'https://dummyjson.com/products'; // Endpoint for all products
+        : 'https://dummyjson.com/products';
 
       try {
         const res = await fetch(endpoint);
@@ -32,17 +33,32 @@ const ProductList = ({ category }) => {
     fetchProducts();
   }, [category]);
 
+  const handleProductClick = (productId) => {
+    setSelectedProductId(productId);
+  };
+
+  const handleBack = () => {
+    setSelectedProductId(null);
+  };
+
   return (
-    <ProductListContainer>
-      {products.map((product) => (
-        <Card
-          key={product.id}
-          title={product.title}
-          image={product.thumbnail}
-          extraInfo={`Price: $${product.price.toFixed(2)}`}
-        />
-      ))}
-    </ProductListContainer>
+    <>
+      {selectedProductId ? (
+        <ProductDetails productId={selectedProductId} onBack={handleBack} />
+      ) : (
+        <ProductListContainer>
+          {products.map((product) => (
+            <Card
+              key={product.id}
+              title={product.title}
+              image={product.thumbnail}
+              extraInfo={`Price: $${product.price.toFixed(2)}`}
+              onClick={() => handleProductClick(product.id)}
+            />
+          ))}
+        </ProductListContainer>
+      )}
+    </>
   );
 };
 

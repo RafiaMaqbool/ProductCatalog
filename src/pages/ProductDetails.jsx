@@ -1,43 +1,110 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-const DetailsContainer = styled.div`
+const ProductDetailsContainer = styled.div`
   display: flex;
-  padding: 16px;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  max-width: 800px;
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-const ImageContainer = styled.div`
-  flex: 1;
+const BackButton = styled.button`
+  align-self: flex-start;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #2c3e50;
+  cursor: pointer;
+  margin-bottom: 20px;
+
+  &:hover {
+    color: #3498db;
+  }
 `;
 
 const ProductImage = styled.img`
   width: 100%;
+  max-width: 350px;
   height: auto;
-  border-radius: 4px;
+  margin-bottom: 25px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: white;
 `;
 
-const Details = styled.div`
-  flex: 2;
+const ProductInfo = styled.div`
+  text-align: center;
+  color: #333;
+  
+  & > h2 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  & > p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  & > p strong {
+    font-weight: 600;
+    color: #2c3e50;
+  }
 `;
 
-const ProductDetails = () => {
-  const location = useLocation();
-  const { product } = location.state; // retrieve the product from state
+const PriceTag = styled.p`
+  font-size: 1.5rem;
+  color: #27ae60;
+  font-weight: bold;
+  margin-bottom: 15px;
+`;
+
+const ProductDetails = ({ productId, onBack }) => {
+  const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`https://dummyjson.com/products/${productId}`);
+        const data = await res.json();
+        setProduct(data);
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    };
+
+    if (productId) {
+      fetchProduct();
+    }
+  }, [productId]);
+
+  if (!product) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    <DetailsContainer>
-      <ImageContainer>
-        <ProductImage src={product.thumbnail} alt={product.title} />
-      </ImageContainer>
-      <Details>
+    <ProductDetailsContainer>
+      <BackButton onClick={onBack}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Go Back
+      </BackButton>
+      <ProductImage src={product.thumbnail} alt={product.title} />
+      <ProductInfo>
         <h2>{product.title}</h2>
         <p>{product.description}</p>
-        <p>Price: ${product.price.toFixed(2)}</p>
-        {/* More details if necessary */}
-      </Details>
-    </DetailsContainer>
+        <PriceTag>${product.price.toFixed(2)}</PriceTag>
+        <p><strong>Category:</strong> {product.category}</p>
+      </ProductInfo>
+    </ProductDetailsContainer>
   );
 };
 

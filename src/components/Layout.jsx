@@ -97,9 +97,15 @@ const Layout = () => {
     setCart([]);
   };
 
+  const handleShowAllProducts = () => {
+    setSelectedCategory('');
+    setActiveFilter('');
+    setSearchQuery(''); 
+  };
+
   return (
     <Container>
-      <NavBar toggleCart={toggleCartVisibility} itemCount={totalItemsInCart} onSearch={handleSearch} />
+      <NavBar toggleCart={toggleCartVisibility} itemCount={totalItemsInCart} onSearch={handleSearch} onShowAllProducts={handleShowAllProducts} />
       <FlexContainer>
         <SideBarWrapper>
           <SideBar onCategorySelect={handleCategorySelect} />

@@ -78,7 +78,7 @@ const ItemCount = styled.span`
   color: white;
 `;
 
-const NavBar = ({ toggleCart, itemCount, onSearch }) => {
+const NavBar = ({ toggleCart, itemCount, onSearch, onShowAllProducts }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (e) => {
@@ -92,7 +92,7 @@ const NavBar = ({ toggleCart, itemCount, onSearch }) => {
 
   return (
     <NavContainer>
-      <StyledLink to="/">Product Catalog</StyledLink>
+      <StyledLink onClick={onShowAllProducts}>Product Catalog</StyledLink>
       <form onSubmit={handleSearchSubmit}>
         <SearchInput
           type="text"

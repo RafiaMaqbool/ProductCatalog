@@ -11,7 +11,7 @@ const ProductListContainer = styled.div`
   gap: 12px;
 `;
 
-const ProductList = ({ category }) => {
+const ProductList = ({ category, handleAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -53,7 +53,8 @@ const ProductList = ({ category }) => {
               title={product.title}
               image={product.thumbnail}
               extraInfo={`Price: $${product.price.toFixed(2)}`}
-              onClick={() => handleProductClick(product.id)}
+              onImageClick={() => handleProductClick(product.id)} 
+              onAddToCart={() => handleAddToCart(product)}
             />
           ))}
         </ProductListContainer>

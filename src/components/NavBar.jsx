@@ -34,6 +34,7 @@ const IconWrapper = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer; /* Add a cursor pointer to indicate it's clickable */
 `;
 
 const CartDiv = styled.div`
@@ -62,15 +63,15 @@ const ItemCount = styled.span`
   color: white;
 `;
 
-const NavBar = () => {
+const NavBar = ({ toggleCart, itemCount }) => {
   return (
     <NavContainer>
       <StyledLink to="/">Home</StyledLink>
       <CartDiv>
-        <IconWrapper>
+        <IconWrapper onClick={toggleCart}>
           <FontAwesomeIcon icon={faCartShopping} style={{ width: '24px', height: '24px' }} />
         </IconWrapper>
-        <ItemCount>0</ItemCount>
+        {itemCount > 0 && <ItemCount>{itemCount}</ItemCount>} 
       </CartDiv>
     </NavContainer>
   );

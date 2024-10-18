@@ -16,11 +16,6 @@ const CardContainer = styled.div`
   flex-direction: column;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
 `;
 
 const CardImage = styled.img`
@@ -28,6 +23,11 @@ const CardImage = styled.img`
   height: 150px;
   object-fit: cover;
   border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
 `;
 
 const CardTitle = styled.h2`
@@ -58,17 +58,17 @@ const AddToCartButton = styled.button`
   }
 `;
 
-const Card = ({ title, image, extraInfo, onClick }) => {
+const Card = ({ title, image, extraInfo, onImageClick, onAddToCart }) => {
   return (
-    <CardContainer onClick={onClick}>
+    <CardContainer>
       {image ? (
-        <CardImage src={image} alt={title} />
+        <CardImage src={image} alt={title} onClick={onImageClick} />
       ) : (
         <p>No image available</p>
       )}
       <CardTitle>{title}</CardTitle>
       <ExtraInfo>{extraInfo}</ExtraInfo>
-      <AddToCartButton>Add to Cart</AddToCartButton>
+      <AddToCartButton onClick={onAddToCart}>Add to Cart</AddToCartButton>
     </CardContainer>
   );
 };

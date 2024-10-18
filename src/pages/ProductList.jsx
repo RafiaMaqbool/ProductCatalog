@@ -9,17 +9,24 @@ const ProductListContainer = styled.div`
   justify-content: center;
   padding: 16px;
   gap: 12px;
+  background-color: #EADAD6;
 `;
 
-const ProductList = ({ category, handleAddToCart }) => {
+const ProductList = ({ category, searchQuery, activeFilter, handleAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const endpoint = category
-        ? `https://dummyjson.com/products/category/${category}`
-        : 'https://dummyjson.com/products';
+      let endpoint = 'https://dummyjson.com/products';
+
+      if (activeFilter === 'search' && searchQuery) {
+        // If activeFilter is 'search', fetch products based on the search query
+        endpoint = `https://dummyjson.com/products/search?q=${searchQuery}`;
+      } else if (activeFilter === 'category' && category) {
+        // If activeFilter is 'category', fetch products based on the selected category
+        endpoint = `https://dummyjson.com/products/category/${category}`;
+      }
 
       try {
         const res = await fetch(endpoint);
@@ -31,7 +38,7 @@ const ProductList = ({ category, handleAddToCart }) => {
     };
 
     fetchProducts();
-  }, [category]);
+  }, [category, searchQuery, activeFilter]);  // Re-fetch when category, searchQuery, or activeFilter changes
 
   const handleProductClick = (productId) => {
     setSelectedProductId(productId);

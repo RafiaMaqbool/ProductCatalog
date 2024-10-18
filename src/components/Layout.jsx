@@ -7,10 +7,15 @@ import Cart from './Cart';
 
 const Container = styled.div`
   background-color: #EADAD6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 `;
 
 const FlexContainer = styled.div`
   display: flex;
+  flex-grow: 1;
+  min-height: 100vh;
 `;
 
 const SideBarWrapper = styled.div`
@@ -20,52 +25,70 @@ const SideBarWrapper = styled.div`
 
 const ContentWrapper = styled.div`
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
 `;
 
 const Layout = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [cart, setCart] = useState([]); // Cart state
+  const [cart, setCart] = useState([]);
   const [isCartVisible, setCartVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState(''); // New state to track the recent action
 
+  // Handle category selection from sidebar
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
+    setActiveFilter('category'); // Update activeFilter to 'category'
+  };
+
+  // Handle search query from the NavBar
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setActiveFilter('search'); // Update activeFilter to 'search'
   };
 
   const toggleCartVisibility = () => {
-    setCartVisible(prevState => !prevState);
+    setCartVisible((prevState) => !prevState);
   };
 
-  // Function to handle adding or updating product quantities in the cart
   const handleUpdateCart = (product, change) => {
     setCart((prevCart) => {
-      const existingItem = prevCart.find(item => item.id === product.id);
+      const existingItem = prevCart.find((item) => item.id === product.id);
       if (existingItem) {
         const newQuantity = existingItem.quantity + change;
         if (newQuantity <= 0) {
-          return prevCart.filter(item => item.id !== product.id); // Remove the item if quantity is 0
+          return prevCart.filter((item) => item.id !== product.id);
         }
-        return prevCart.map(item => 
+        return prevCart.map((item) =>
           item.id === product.id ? { ...item, quantity: newQuantity } : item
         );
       } else {
-        return [...prevCart, { ...product, quantity: 1 }]; // Add new item with initial quantity of 1
+        return [...prevCart, { ...product, quantity: 1 }];
       }
     });
   };
 
-  const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0); // Calculate total items
+  const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <Container>
-      <NavBar toggleCart={toggleCartVisibility} itemCount={totalItemsInCart} />
+      <NavBar toggleCart={toggleCartVisibility} itemCount={totalItemsInCart} onSearch={handleSearch} />
       <FlexContainer>
         <SideBarWrapper>
           <SideBar onCategorySelect={handleCategorySelect} />
         </SideBarWrapper>
         <ContentWrapper>
-          <ProductList category={selectedCategory} handleAddToCart={handleUpdateCart} /> 
+          <ProductList 
+            category={selectedCategory} 
+            searchQuery={searchQuery} 
+            activeFilter={activeFilter} // Pass activeFilter to ProductList
+            handleAddToCart={handleUpdateCart} 
+          />
         </ContentWrapper>
-        {isCartVisible && <Cart cartItems={cart} onUpdateCart={handleUpdateCart} />} {/* Pass the update function */}
+        {isCartVisible && <Cart cartItems={cart} onUpdateCart={handleUpdateCart} />}
       </FlexContainer>
     </Container>
   );

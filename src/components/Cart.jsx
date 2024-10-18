@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
@@ -6,29 +6,48 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 const CartContainer = styled.div`
   position: fixed;
   right: 0;
-  top: 5;
+  top: 0;
   height: 100%;
-  width: 300px;
-  background-color: rgba(248, 249, 250, 0.8);
-  border-left: 1px solid #dee2e6;
+  width: 350px;
+  background-color: #ffffff;
+  border-left: 1px solid #e0e0e0;
   padding: 20px;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   overflow-y: auto; 
+  transition: transform 0.3s ease-in-out;
+
+  h3 {
+    color: #333;
+    margin-bottom: 20px;
+  }
 `;
 
 const CartItem = styled.div`
   display: flex;
-  flex-direction: column;
+  align-items: center;
   padding: 15px;
-  background-color: white;
-  border-radius: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
   margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
+`;
+
+const ItemImage = styled.img`
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  margin-right: 15px;
+  object-fit: cover;
+`;
+
+const ItemDetails = styled.div`
+  flex-grow: 1;
 `;
 
 const ItemTitle = styled.h4`
@@ -48,8 +67,8 @@ const QuantityControls = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #f0f0f0;
-  border-radius: 10px;
+  background-color: #e7e7e7;
+  border-radius: 5px;
   padding: 8px 12px;
 `;
 
@@ -58,11 +77,8 @@ const ControlButton = styled.button`
   background-color: transparent;
   cursor: pointer;
   font-size: 18px;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   color: #007bff;
+  transition: color 0.2s ease;
 
   &:hover {
     color: #0056b3;
@@ -75,6 +91,7 @@ const QuantityDisplay = styled.span`
   color: #333;
   margin: 0 10px;
 `;
+
 const CheckoutButton = styled.button`
   width: 100%;
   padding: 10px;
@@ -87,6 +104,7 @@ const CheckoutButton = styled.button`
   cursor: pointer;
   margin-top: 20px;
   text-align: center;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #CF5E59;
@@ -115,17 +133,20 @@ const Cart = ({ cartItems, onUpdateCart }) => {
         <>
           {cartItems.map((item, index) => (
             <CartItem key={index}>
-              <ItemTitle>{item.title}</ItemTitle>
-              <ItemPrice>Price: ${item.price.toFixed(2)}</ItemPrice>
-              <QuantityControls>
-                <ControlButton onClick={() => handleDecrement(item)}>
-                  <FontAwesomeIcon icon={faMinus} />
-                </ControlButton>
-                <QuantityDisplay>{item.quantity}</QuantityDisplay>
-                <ControlButton onClick={() => handleIncrement(item)}>
-                  <FontAwesomeIcon icon={faPlus} />
-                </ControlButton>
-              </QuantityControls>
+              <ItemImage src={item.thumbnail} alt={item.title} />
+              <ItemDetails>
+                <ItemTitle>{item.title}</ItemTitle>
+                <ItemPrice>Price: ${item.price.toFixed(2)}</ItemPrice>
+                <QuantityControls>
+                  <ControlButton onClick={() => handleDecrement(item)}>
+                    <FontAwesomeIcon icon={faMinus} />
+                  </ControlButton>
+                  <QuantityDisplay>{item.quantity}</QuantityDisplay>
+                  <ControlButton onClick={() => handleIncrement(item)}>
+                    <FontAwesomeIcon icon={faPlus} />
+                  </ControlButton>
+                </QuantityControls>
+              </ItemDetails>
             </CartItem>
           ))}
           <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>

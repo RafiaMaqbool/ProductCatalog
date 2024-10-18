@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +26,16 @@ const StyledLink = styled(Link)`
   &:hover {
     color: #555;
   }
+`;
+
+const SearchInput = styled.input`
+  padding: 8px;
+  width: 300px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  margin-left: 20px;
 `;
 
 const IconWrapper = styled.span`
@@ -63,18 +73,37 @@ const ItemCount = styled.span`
   color: white;
 `;
 
-const NavBar = ({ toggleCart, itemCount }) => {
+const NavBar = ({ toggleCart, itemCount, onSearch }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    onSearch(searchQuery);
+  };
+
   return (
     <NavContainer>
       <StyledLink to="/">Home</StyledLink>
+      <form onSubmit={handleSearchSubmit}>
+        <SearchInput
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+      </form>
       <CartDiv>
         <IconWrapper onClick={toggleCart}>
           <FontAwesomeIcon icon={faCartShopping} style={{ width: '24px', height: '24px' }} />
         </IconWrapper>
-        {itemCount > 0 && <ItemCount>{itemCount}</ItemCount>} 
+        {itemCount > 0 && <ItemCount>{itemCount}</ItemCount>}
       </CartDiv>
     </NavContainer>
   );
-}
+};
 
 export default NavBar;

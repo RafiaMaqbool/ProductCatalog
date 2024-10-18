@@ -12,19 +12,23 @@ const ProductListContainer = styled.div`
   background-color: #EADAD6;
 `;
 
+const Title = styled.h1`
+  text-align: center;
+  margin-bottom: 16px;
+`;
+
 const ProductList = ({ category, searchQuery, activeFilter, handleAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const fetchProducts = async () => {
       let endpoint = 'https://dummyjson.com/products';
 
       if (activeFilter === 'search' && searchQuery) {
-        // If activeFilter is 'search', fetch products based on the search query
         endpoint = `https://dummyjson.com/products/search?q=${searchQuery}`;
       } else if (activeFilter === 'category' && category) {
-        // If activeFilter is 'category', fetch products based on the selected category
         endpoint = `https://dummyjson.com/products/category/${category}`;
       }
 
@@ -38,7 +42,7 @@ const ProductList = ({ category, searchQuery, activeFilter, handleAddToCart }) =
     };
 
     fetchProducts();
-  }, [category, searchQuery, activeFilter]);  // Re-fetch when category, searchQuery, or activeFilter changes
+  }, [category, searchQuery, activeFilter]);
 
   const handleProductClick = (productId) => {
     setSelectedProductId(productId);
@@ -48,8 +52,17 @@ const ProductList = ({ category, searchQuery, activeFilter, handleAddToCart }) =
     setSelectedProductId(null);
   };
 
+  const handleProductAddToCart = (product) => {
+    const alreadyInCart = handleAddToCart(product);
+    if (!alreadyInCart) {
+      setMessage('Product already added to cart');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
   return (
     <>
+      <Title>Product Catalog</Title>
       {selectedProductId ? (
         <ProductDetails productId={selectedProductId} onBack={handleBack} />
       ) : (
@@ -60,12 +73,13 @@ const ProductList = ({ category, searchQuery, activeFilter, handleAddToCart }) =
               title={product.title}
               image={product.thumbnail}
               extraInfo={`Price: $${product.price.toFixed(2)}`}
-              onImageClick={() => handleProductClick(product.id)} 
+              onImageClick={() => handleProductClick(product.id)}
               onAddToCart={() => handleAddToCart(product)}
             />
           ))}
         </ProductListContainer>
       )}
+      {message && <p>{message}</p>}
     </>
   );
 };

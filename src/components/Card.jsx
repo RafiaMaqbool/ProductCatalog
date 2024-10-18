@@ -31,7 +31,7 @@ const CardImage = styled.img`
 `;
 
 const CardTitle = styled.h2`
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin-top: 8px;
   margin-bottom: 8px;
   flex-shrink: 0;

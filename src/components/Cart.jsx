@@ -9,7 +9,7 @@ const CartContainer = styled.div`
   top: 0;
   height: 100%;
   width: 350px;
-  background-color: #ffffff;
+  background-color: rgba(223, 210, 205, 0.8);
   border-left: 1px solid #e0e0e0;
   padding: 20px;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
@@ -25,8 +25,8 @@ const CartContainer = styled.div`
 const CartItem = styled.div`
   display: flex;
   align-items: center;
-  padding: 15px;
-  background-color: #f9f9f9;
+  padding: 10px;
+  background-color: white;
   border-radius: 8px;
   margin-bottom: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -92,8 +92,13 @@ const QuantityDisplay = styled.span`
   margin: 0 10px;
 `;
 
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
 const CheckoutButton = styled.button`
-  width: 100%;
   padding: 10px;
   background-color: #222222;
   color: white;
@@ -102,16 +107,35 @@ const CheckoutButton = styled.button`
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
   text-align: center;
   transition: background-color 0.3s ease;
+  flex-grow: 1;
+  margin-right: 10px;
 
   &:hover {
     background-color: #CF5E59;
   }
 `;
 
-const Cart = ({ cartItems, onUpdateCart }) => {
+const ClearButton = styled.button`
+  padding: 10px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  flex-grow: 1;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
+const Cart = ({ cartItems, onUpdateCart, onClearCart }) => {
   const handleIncrement = (item) => {
     onUpdateCart(item, 1);
   };
@@ -149,7 +173,10 @@ const Cart = ({ cartItems, onUpdateCart }) => {
               </ItemDetails>
             </CartItem>
           ))}
-          <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
+          <ButtonContainer>
+            <CheckoutButton onClick={handleCheckout}>Checkout</CheckoutButton>
+            <ClearButton onClick={onClearCart}>Clear Cart</ClearButton>
+          </ButtonContainer>
         </>
       )}
     </CartContainer>

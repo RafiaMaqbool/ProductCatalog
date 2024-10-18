@@ -3,15 +3,33 @@ import styled from 'styled-components';
 
 const SidebarContainer = styled.div`
   width: 200px;
-  background-color: #f4f4f4;
+  background-color: white;
   padding: 20px;
   border-right: 1px solid #ddd;
   height: 100vh; 
   position: fixed;
   top: 10; 
   overflow-y: auto; 
-`;
 
+  /* Custom Scrollbar Styles */
+  &::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar thumb on hover */
+  }
+`;
 
 const Title = styled.h3`
   margin-bottom: 20px;

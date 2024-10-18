@@ -28,6 +28,11 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const SearchForm = styled.form`
+  display: flex; 
+  margin-left: 20px;
+`;
+
 const SearchInput = styled.input`
   padding: 8px;
   width: 300px;
@@ -87,7 +92,7 @@ const NavBar = ({ toggleCart, itemCount, onSearch }) => {
 
   return (
     <NavContainer>
-      <StyledLink to="/">Home</StyledLink>
+      <StyledLink to="/">Product Catalog</StyledLink>
       <form onSubmit={handleSearchSubmit}>
         <SearchInput
           type="text"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import NavBar from './NavBar';
 import SideBar from './SideBar';
@@ -33,21 +33,29 @@ const ContentWrapper = styled.div`
 
 const Layout = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    // Retrieve cart from local storage
+    const storedCart = localStorage.getItem('cart');
+    return storedCart ? JSON.parse(storedCart) : [];
+  });
   const [isCartVisible, setCartVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeFilter, setActiveFilter] = useState(''); // New state to track the recent action
+  const [activeFilter, setActiveFilter] = useState('');
+  const [message, setMessage] = useState('');
 
-  // Handle category selection from sidebar
+  useEffect(() => {
+    // Update local storage whenever cart changes
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    setActiveFilter('category'); // Update activeFilter to 'category'
+    setActiveFilter('category');
   };
 
-  // Handle search query from the NavBar
   const handleSearch = (query) => {
     setSearchQuery(query);
-    setActiveFilter('search'); // Update activeFilter to 'search'
+    setActiveFilter('search');
   };
 
   const toggleCartVisibility = () => {
@@ -71,7 +79,23 @@ const Layout = () => {
     });
   };
 
+  const handleAddToCart = (product) => {
+    const existingItem = cart.find((item) => item.id === product.id);
+    if (existingItem) {
+      setMessage('Product already added to cart');
+      setTimeout(() => setMessage(''), 3000);
+      return true;
+    } else {
+      handleUpdateCart(product, 1);
+      return false;
+    }
+  };
+
   const totalItemsInCart = cart.reduce((total, item) => total + item.quantity, 0);
+
+  const handleClearCart = () => {
+    setCart([]);
+  };
 
   return (
     <Container>
@@ -84,11 +108,12 @@ const Layout = () => {
           <ProductList 
             category={selectedCategory} 
             searchQuery={searchQuery} 
-            activeFilter={activeFilter} // Pass activeFilter to ProductList
-            handleAddToCart={handleUpdateCart} 
+            activeFilter={activeFilter} 
+            handleAddToCart={handleAddToCart} 
+            message={message} 
           />
         </ContentWrapper>
-        {isCartVisible && <Cart cartItems={cart} onUpdateCart={handleUpdateCart} />}
+        {isCartVisible && <Cart cartItems={cart} onUpdateCart={handleUpdateCart} onClearCart={handleClearCart} />}
       </FlexContainer>
     </Container>
   );

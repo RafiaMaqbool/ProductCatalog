@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 
 const NavContainer = styled.header`
-  background-color: white;
+  background-color: #222222;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,7 +21,7 @@ const NavContainer = styled.header`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
-  color: #333;
+  color: white;
   font-size: 16px;
   &:hover {
     color: #555;
@@ -34,7 +34,7 @@ const IconWrapper = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer; /* Add a cursor pointer to indicate it's clickable */
+  cursor: pointer;
 `;
 
 const CartDiv = styled.div`

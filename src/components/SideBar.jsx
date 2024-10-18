@@ -6,7 +6,12 @@ const SidebarContainer = styled.div`
   background-color: #f4f4f4;
   padding: 20px;
   border-right: 1px solid #ddd;
+  height: 100vh; 
+  position: fixed;
+  top: 10; 
+  overflow-y: auto; 
 `;
+
 
 const Title = styled.h3`
   margin-bottom: 20px;

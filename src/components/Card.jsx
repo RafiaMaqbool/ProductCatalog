@@ -47,14 +47,14 @@ const ExtraInfo = styled.div`
 const AddToCartButton = styled.button`
   margin-top: auto;
   padding: 10px;
-  background-color: #28a745;
+  background-color: #222222;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: #218838;
+    background-color: #CF5E59;
   }
 `;
 
